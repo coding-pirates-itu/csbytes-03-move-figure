@@ -1,15 +1,20 @@
-﻿var character = new[]
+﻿var character = new CharacterLine[]
 {
-    "  (°°)  ",
-    "==╡██╞==",
-    "  └║║┘  ",
+    new CharacterLine(
+        new CharacterSegment(ConsoleColor.White, "  ("),
+        new CharacterSegment(ConsoleColor.Blue, "°°"),
+        new CharacterSegment(ConsoleColor.White, ")  ")),
+    new CharacterLine("==╡██╞=="),
+    new CharacterLine("  └║║┘  "),
 };
+
 
 var isExit = false;
 var x = 0;
 var y = 0;
-var charWidth = character[0].Length;
+var charWidth = character.Last().Segments.First().Text.Length;
 var charHeight = character.Length;
+
 Console.CursorVisible = false;
 
 while (!isExit)
@@ -20,9 +25,12 @@ while (!isExit)
 
     for (var lineIndex = 0; lineIndex < charHeight; lineIndex++)
     {
-        var line = character[lineIndex];
         Console.SetCursorPosition(x, y + lineIndex);
-        Console.Write(line);
+        foreach (var segment in character[lineIndex].Segments)
+        {
+            Console.ForegroundColor = segment.Color;
+            Console.Write(segment.Text);
+        }
     }
 
     var ch = Console.ReadKey(true);
@@ -51,3 +59,5 @@ while (!isExit)
             break;
     }
 }
+
+Console.CursorVisible = true;
